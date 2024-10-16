@@ -5,17 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>4인 마작 점수판</title>
   <style>
-    /* 페이지 전체 중앙에 점수판을 배치하는 스타일 */
+    /* 점수판 스타일 */
     body {
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
-      margin: 0;
       font-family: Arial, sans-serif;
     }
 
-    /* 점수판 테이블 스타일 */
     .scoreboard {
       border-collapse: collapse;
       width: 60%;
@@ -28,13 +26,11 @@
       font-size: 1.2em;
     }
 
-    /* 제목 스타일 */
     h1 {
       text-align: center;
       margin-bottom: 20px;
     }
 
-    /* 점수 입력 필드 스타일 */
     .score-input {
       width: 80px;
       padding: 5px;
@@ -56,13 +52,34 @@
       </thead>
       <tbody>
         <tr>
-          <td><input type="number" class="score-input" placeholder="점수 입력"></td>
-          <td><input type="number" class="score-input" placeholder="점수 입력"></td>
-          <td><input type="number" class="score-input" placeholder="점수 입력"></td>
-          <td><input type="number" class="score-input" placeholder="점수 입력"></td>
+          <td><input type="number" id="score1" class="score-input" placeholder="점수 입력"></td>
+          <td><input type="number" id="score2" class="score-input" placeholder="점수 입력"></td>
+          <td><input type="number" id="score3" class="score-input" placeholder="점수 입력"></td>
+          <td><input type="number" id="score4" class="score-input" placeholder="점수 입력"></td>
         </tr>
       </tbody>
     </table>
+    <button onclick="saveScores()">점수 저장</button>
+    <button onclick="loadScores()">점수 불러오기</button>
   </div>
+
+  <script>
+    // 점수 저장하기 (localStorage에 저장)
+    function saveScores() {
+      localStorage.setItem('score1', document.getElementById('score1').value);
+      localStorage.setItem('score2', document.getElementById('score2').value);
+      localStorage.setItem('score3', document.getElementById('score3').value);
+      localStorage.setItem('score4', document.getElementById('score4').value);
+      alert('점수가 저장되었습니다!');
+    }
+
+    // 점수 불러오기 (localStorage에서 가져오기)
+    function loadScores() {
+      document.getElementById('score1').value = localStorage.getItem('score1') || 0;
+      document.getElementById('score2').value = localStorage.getItem('score2') || 0;
+      document.getElementById('score3').value = localStorage.getItem('score3') || 0;
+      document.getElementById('score4').value = localStorage.getItem('score4') || 0;
+    }
+  </script>
 </body>
 </html>
