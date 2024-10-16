@@ -1,12 +1,68 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Mahjong Score Tracker</title>
+  <title>4인 마작 점수판</title>
+  <style>
+    /* 페이지 전체 중앙에 점수판을 배치하는 스타일 */
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    /* 점수판 테이블 스타일 */
+    .scoreboard {
+      border-collapse: collapse;
+      width: 60%;
+      text-align: center;
+    }
+
+    .scoreboard th, .scoreboard td {
+      border: 2px solid #333;
+      padding: 15px;
+      font-size: 1.2em;
+    }
+
+    /* 제목 스타일 */
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    /* 점수 입력 필드 스타일 */
+    .score-input {
+      width: 80px;
+      padding: 5px;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
-  <h1>Welcome to Mahjong Score Tracker</h1>
-  <p>Track your game scores here!</p>
+  <div>
+    <h1>4인 마작 점수판</h1>
+    <table class="scoreboard">
+      <thead>
+        <tr>
+          <th>플레이어 1</th>
+          <th>플레이어 2</th>
+          <th>플레이어 3</th>
+          <th>플레이어 4</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><input type="number" class="score-input" placeholder="점수 입력"></td>
+          <td><input type="number" class="score-input" placeholder="점수 입력"></td>
+          <td><input type="number" class="score-input" placeholder="점수 입력"></td>
+          <td><input type="number" class="score-input" placeholder="점수 입력"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </body>
 </html>
