@@ -35,6 +35,15 @@
       width: 80px;
       padding: 5px;
       text-align: center;
+      -moz-appearance: textfield; /* Firefox에서 스핀 버튼 숨기기 */
+    }
+
+    /* 새 게임 버튼 스타일 */
+    .button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 1em;
+      cursor: pointer;
     }
   </style>
 </head>
@@ -52,34 +61,49 @@
       </thead>
       <tbody>
         <tr>
-          <td><input type="number" id="score1" class="score-input" placeholder="점수 입력"></td>
-          <td><input type="number" id="score2" class="score-input" placeholder="점수 입력"></td>
-          <td><input type="number" id="score3" class="score-input" placeholder="점수 입력"></td>
-          <td><input type="number" id="score4" class="score-input" placeholder="점수 입력"></td>
+          <td><input type="number" id="score1" class="score-input" value="25000"></td>
+          <td><input type="number" id="score2" class="score-input" value="25000"></td>
+          <td><input type="number" id="score3" class="score-input" value="25000"></td>
+          <td><input type="number" id="score4" class="score-input" value="25000"></td>
         </tr>
       </tbody>
     </table>
-    <button onclick="saveScores()">점수 저장</button>
-    <button onclick="loadScores()">점수 불러오기</button>
+    <button class="button" onclick="resetGame()">새 게임</button>
   </div>
 
   <script>
-    // 점수 저장하기 (localStorage에 저장)
+    // 점수를 자동 저장하는 함수
     function saveScores() {
       localStorage.setItem('score1', document.getElementById('score1').value);
       localStorage.setItem('score2', document.getElementById('score2').value);
       localStorage.setItem('score3', document.getElementById('score3').value);
       localStorage.setItem('score4', document.getElementById('score4').value);
-      alert('점수가 저장되었습니다!');
     }
 
-    // 점수 불러오기 (localStorage에서 가져오기)
+    // 페이지 로드 시 점수를 불러오는 함수
     function loadScores() {
-      document.getElementById('score1').value = localStorage.getItem('score1') || 0;
-      document.getElementById('score2').value = localStorage.getItem('score2') || 0;
-      document.getElementById('score3').value = localStorage.getItem('score3') || 0;
-      document.getElementById('score4').value = localStorage.getItem('score4') || 0;
+      document.getElementById('score1').value = localStorage.getItem('score1') || 25000;
+      document.getElementById('score2').value = localStorage.getItem('score2') || 25000;
+      document.getElementById('score3').value = localStorage.getItem('score3') || 25000;
+      document.getElementById('score4').value = localStorage.getItem('score4') || 25000;
     }
+
+    // 새 게임 시작 시 점수 초기화
+    function resetGame() {
+      document.getElementById('score1').value = 25000;
+      document.getElementById('score2').value = 25000;
+      document.getElementById('score3').value = 25000;
+      document.getElementById('score4').value = 25000;
+      saveScores(); // 새 게임 시 초기화된 점수도 저장
+    }
+
+    // 점수 입력란에 변화가 있을 때 자동으로 점수를 저장
+    document.querySelectorAll('.score-input').forEach(input => {
+      input.addEventListener('input', saveScores);
+    });
+
+    // 페이지가 로드될 때 자동으로 점수를 불러오기
+    window.onload = loadScores;
   </script>
 </body>
 </html>
