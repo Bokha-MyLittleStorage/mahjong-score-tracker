@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>4인 마작 점수판</title>
   <style>
-    /* 점수판 스타일 */
     body {
       display: flex;
       justify-content: center;
@@ -13,37 +12,36 @@
       height: 100vh;
       font-family: Arial, sans-serif;
     }
-
     .scoreboard {
       border-collapse: collapse;
       width: 60%;
       text-align: center;
     }
-
     .scoreboard th, .scoreboard td {
       border: 2px solid #333;
       padding: 15px;
       font-size: 1.2em;
     }
-
     h1 {
       text-align: center;
       margin-bottom: 20px;
     }
-
     .score-input {
       width: 80px;
       padding: 5px;
       text-align: center;
-      -moz-appearance: textfield; /* Firefox에서 스핀 버튼 숨기기 */
+      -moz-appearance: textfield;
     }
-
-    /* 새 게임 버튼 스타일 */
     .button {
-      margin-top: 20px;
-      padding: 10px 20px;
+      margin-top: 10px;
+      padding: 10px;
       font-size: 1em;
       cursor: pointer;
+    }
+    .flex-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
   </style>
 </head>
@@ -66,43 +64,135 @@
           <td><input type="number" id="score3" class="score-input" value="25000"></td>
           <td><input type="number" id="score4" class="score-input" value="25000"></td>
         </tr>
+        <tr>
+          <td class="flex-container">
+            <button class="button" onclick="tsumo(1)">쯔모</button>
+            <button class="button" onclick="ron(1)">론</button>
+            <button class="button" onclick="riichi(1)">리치</button>
+          </td>
+          <td class="flex-container">
+            <button class="button" onclick="tsumo(2)">쯔모</button>
+            <button class="button" onclick="ron(2)">론</button>
+            <button class="button" onclick="riichi(2)">리치</button>
+          </td>
+          <td class="flex-container">
+            <button class="button" onclick="tsumo(3)">쯔모</button>
+            <button class="button" onclick="ron(3)">론</button>
+            <button class="button" onclick="riichi(3)">리치</button>
+          </td>
+          <td class="flex-container">
+            <button class="button" onclick="tsumo(4)">쯔모</button>
+            <button class="button" onclick="ron(4)">론</button>
+            <button class="button" onclick="riichi(4)">리치</button>
+          </td>
+        </tr>
       </tbody>
     </table>
+    <h2>공탁 점수: <span id="kyotaku">0</span> 점</h2>
     <button class="button" onclick="resetGame()">새 게임</button>
   </div>
 
   <script>
-    // 점수를 자동 저장하는 함수
-    function saveScores() {
+    let kyotaku = 0;  // 공탁 점수
+
+    function updateScores() {
+      // 점수 저장
       localStorage.setItem('score1', document.getElementById('score1').value);
       localStorage.setItem('score2', document.getElementById('score2').value);
       localStorage.setItem('score3', document.getElementById('score3').value);
       localStorage.setItem('score4', document.getElementById('score4').value);
+      localStorage.setItem('kyotaku', kyotaku);
     }
 
-    // 페이지 로드 시 점수를 불러오는 함수
     function loadScores() {
+      // 점수 불러오기
       document.getElementById('score1').value = localStorage.getItem('score1') || 25000;
       document.getElementById('score2').value = localStorage.getItem('score2') || 25000;
       document.getElementById('score3').value = localStorage.getItem('score3') || 25000;
       document.getElementById('score4').value = localStorage.getItem('score4') || 25000;
+      kyotaku = Number(localStorage.getItem('kyotaku')) || 0;
+      document.getElementById('kyotaku').textContent = kyotaku;
     }
 
-    // 새 게임 시작 시 점수 초기화
+    function tsumo(player) {
+      const oya = prompt("오야는 누구입니까? (1-4 중 입력)");
+      if (!oya || oya < 1 || oya > 4) {
+        alert("올바른 오야 번호를 입력하세요.");
+        return;
+      }
+
+      if (oya == player) {
+        const points = prompt("다른 세 플레이어로부터 가져올 점수를 입력하세요:");
+        if (points) {
+          for (let i = 1; i <= 4; i++) {
+            if (i != player) {
+              changeScore(i, -points);
+            }
+          }
+          changeScore(player, points * 3);
+        }
+      } else {
+        const oyaPoints = prompt("오야로부터 가져올 점수를 입력하세요:");
+        const othersPoints = prompt("나머지 두 플레이어로부터 가져올 점수를 입력하세요:");
+        if (oyaPoints && othersPoints) {
+          changeScore(oya, -oyaPoints);
+          for (let i = 1; i <= 4; i++) {
+            if (i != player && i != oya) {
+              changeScore(i, -othersPoints);
+            }
+          }
+          changeScore(player, Number(oyaPoints) + 2 * Number(othersPoints));
+        }
+      }
+      checkKyotaku(player);
+    }
+
+    function ron(player) {
+      const fromPlayer = prompt("방총자는 누구입니까? (1-4 중 입력)");
+      if (!fromPlayer || fromPlayer < 1 || fromPlayer > 4 || fromPlayer == player) {
+        alert("올바른 방총자 번호를 입력하세요.");
+        return;
+      }
+
+      const points = prompt("방총자로부터 가져올 점수를 입력하세요:");
+      if (points) {
+        changeScore(fromPlayer, -points);
+        changeScore(player, points);
+      }
+      checkKyotaku(player);
+    }
+
+    function riichi(player) {
+      changeScore(player, -1000);
+      kyotaku += 1000;
+      document.getElementById('kyotaku').textContent = kyotaku;
+      updateScores();
+    }
+
+    function checkKyotaku(winner) {
+      if (kyotaku > 0) {
+        changeScore(winner, kyotaku);
+        kyotaku = 0;
+        document.getElementById('kyotaku').textContent = 0;
+      }
+      updateScores();
+    }
+
+    function changeScore(player, points) {
+      const scoreElement = document.getElementById('score' + player);
+      scoreElement.value = Number(scoreElement.value) + Number(points);
+    }
+
     function resetGame() {
       document.getElementById('score1').value = 25000;
       document.getElementById('score2').value = 25000;
       document.getElementById('score3').value = 25000;
       document.getElementById('score4').value = 25000;
-      saveScores(); // 새 게임 시 초기화된 점수도 저장
+      kyotaku = 0;
+      document.getElementById('kyotaku').textContent = 0;
+      updateScores();
     }
 
-    // 점수 입력란에 변화가 있을 때 자동으로 점수를 저장
-    document.querySelectorAll('.score-input').forEach(input => {
-      input.addEventListener('input', saveScores);
-    });
-
-    // 페이지가 로드될 때 자동으로 점수를 불러오기
     window.onload = loadScores;
   </script>
 </body>
