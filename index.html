@@ -114,3 +114,111 @@
 
   <h2>공탁 점수: <span id="kyotaku">0</span> 점</h2>
   <button class="button" onclick="resetGame()">새 게임</button>
+  <script>
+    let scores = [25000, 25000, 25000, 25000];
+    let kyotaku = 0;
+
+    // 점수 초기화
+    function resetGame() {
+      scores = [25000, 25000, 25000, 25000];
+      kyotaku = 0;
+      updateUI();
+    }
+
+    // UI 업데이트
+    function updateUI() {
+      document.getElementById('score1').value = scores[0];
+      document.getElementById('score2').value = scores[1];
+      document.getElementById('score3').value = scores[2];
+      document.getElementById('score4').value = scores[3];
+      document.getElementById('kyotaku').textContent = kyotaku;
+      saveScores();
+    }
+
+    // 점수 저장 (로컬 스토리지 사용)
+    function saveScores() {
+      localStorage.setItem('scores', JSON.stringify(scores));
+      localStorage.setItem('kyotaku', kyotaku);
+    }
+
+    // 점수 불러오기
+    function loadScores() {
+      const savedScores = localStorage.getItem('scores');
+      const savedKyotaku = localStorage.getItem('kyotaku');
+      if (savedScores) {
+        scores = JSON.parse(savedScores);
+        kyotaku = parseInt(savedKyotaku, 10) || 0;
+        updateUI();
+      }
+    }
+
+    // 쯔모 함수
+    function tsumo(player) {
+      let oya = parseInt(prompt('오야는 누구입니까? (1-4)'), 10);
+      if (isNaN(oya) || oya < 1 || oya > 4) {
+        alert('유효하지 않은 오야 번호입니다.');
+        return;
+      }
+      if (oya === player) {
+        let point = parseInt(prompt('다른 세 명의 플레이어로부터 받을 점수는?'), 10);
+        if (!isNaN(point)) {
+          for (let i = 0; i < 4; i++) {
+            if (i + 1 !== player) scores[i] -= point;
+          }
+          scores[player - 1] += point * 3;
+        }
+      } else {
+        let oyaPoint = parseInt(prompt('오야로부터 받을 점수는?'), 10);
+        let otherPoint = parseInt(prompt('다른 두 명의 플레이어로부터 받을 점수는?'), 10);
+        if (!isNaN(oyaPoint) && !isNaN(otherPoint)) {
+          scores[oya - 1] -= oyaPoint;
+          for (let i = 0; i < 4; i++) {
+            if (i + 1 !== player && i + 1 !== oya) scores[i] -= otherPoint;
+          }
+          scores[player - 1] += oyaPoint + otherPoint * 2;
+        }
+      }
+      distributeKyotaku(player);
+      updateUI();
+    }
+
+    // 론 함수
+    function ron(player) {
+      let loser = parseInt(prompt('방총자는 누구입니까? (1-4)'), 10);
+      if (isNaN(loser) || loser < 1 || loser > 4 || loser === player) {
+        alert('유효하지 않은 방총자 번호입니다.');
+        return;
+      }
+      let point = parseInt(prompt('방총자로부터 받을 점수는?'), 10);
+      if (!isNaN(point)) {
+        scores[loser - 1] -= point;
+        scores[player - 1] += point;
+      }
+      distributeKyotaku(player);
+      updateUI();
+    }
+
+    // 리치 함수
+    function riichi(player) {
+      if (scores[player - 1] >= 1000) {
+        scores[player - 1] -= 1000;
+        kyotaku += 1000;
+        updateUI();
+      } else {
+        alert('리치를 선언할 충분한 점수가 없습니다.');
+      }
+    }
+
+    // 공탁 점수 분배 함수
+    function distributeKyotaku(player) {
+      if (kyotaku > 0) {
+        scores[player - 1] += kyotaku;
+        kyotaku = 0;
+      }
+    }
+
+    // 페이지 로드 시 자동 불러오기
+    window.onload = loadScores;
+  </script>
+</body>
+</html>
