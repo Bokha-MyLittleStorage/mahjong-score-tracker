@@ -9,15 +9,13 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      flex-direction: column;
-      font-family: Arial, sans-serif;
       height: 100vh;
+      font-family: Arial, sans-serif;
     }
     .scoreboard {
       border-collapse: collapse;
       width: 80%;
       text-align: center;
-      margin-bottom: 20px;
     }
     .scoreboard th, .scoreboard td {
       border: 2px solid #333;
@@ -31,19 +29,19 @@
       font-size: 1em;
     }
     .button {
-      margin: 2px;
+      margin-top: 5px;
       padding: 5px;
       font-size: 0.8em;
       cursor: pointer;
     }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
     .flex-container {
       display: flex;
       justify-content: space-around;
-      width: 100%;
-    }
-    .button-group {
-      display: flex;
-      justify-content: space-around;
+      margin-top: 10px;
     }
     .keypad {
       display: flex;
@@ -69,50 +67,53 @@
   </style>
 </head>
 <body>
-  <h1>4인 마작 점수판</h1>
-  <table class="scoreboard">
-    <thead>
-      <tr>
-        <th>플레이어 1</th>
-        <th>플레이어 2</th>
-        <th>플레이어 3</th>
-        <th>플레이어 4</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><input type="number" id="score1" class="score-input" value="25000"></td>
-        <td><input type="number" id="score2" class="score-input" value="25000"></td>
-        <td><input type="number" id="score3" class="score-input" value="25000"></td>
-        <td><input type="number" id="score4" class="score-input" value="25000"></td>
-      </tr>
-    </tbody>
-  </table>
+  <div>
+    <h1>4인 마작 점수판</h1>
+    <table class="scoreboard">
+      <thead>
+        <tr>
+          <th>플레이어 1</th>
+          <th>플레이어 2</th>
+          <th>플레이어 3</th>
+          <th>플레이어 4</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><input type="number" id="score1" class="score-input" value="25000"></td>
+          <td><input type="number" id="score2" class="score-input" value="25000"></td>
+          <td><input type="number" id="score3" class="score-input" value="25000"></td>
+          <td><input type="number" id="score4" class="score-input" value="25000"></td>
+        </tr>
+      </tbody>
+    </table>
 
-  <div class="flex-container">
-    <div class="button-group">
-      <button class="button" onclick="tsumo(1)">쯔모</button>
-      <button class="button" onclick="ron(1)">론</button>
-      <button class="button" onclick="riichi(1)">리치</button>
+    <div class="flex-container">
+      <div>
+        <button class="button" onclick="tsumo(1)">쯔모</button>
+        <button class="button" onclick="ron(1)">론</button>
+        <button class="button" onclick="riichi(1)">리치</button>
+      </div>
+      <div>
+        <button class="button" onclick="tsumo(2)">쯔모</button>
+        <button class="button" onclick="ron(2)">론</button>
+        <button class="button" onclick="riichi(2)">리치</button>
+      </div>
+      <div>
+        <button class="button" onclick="tsumo(3)">쯔모</button>
+        <button class="button" onclick="ron(3)">론</button>
+        <button class="button" onclick="riichi(3)">리치</button>
+      </div>
+      <div>
+        <button class="button" onclick="tsumo(4)">쯔모</button>
+        <button class="button" onclick="ron(4)">론</button>
+        <button class="button" onclick="riichi(4)">리치</button>
+      </div>
     </div>
-    <div class="button-group">
-      <button class="button" onclick="tsumo(2)">쯔모</button>
-      <button class="button" onclick="ron(2)">론</button>
-      <button class="button" onclick="riichi(2)">리치</button>
-    </div>
-    <div class="button-group">
-      <button class="button" onclick="tsumo(3)">쯔모</button>
-      <button class="button" onclick="ron(3)">론</button>
-      <button class="button" onclick="riichi(3)">리치</button>
-    </div>
-    <div class="button-group">
-      <button class="button" onclick="tsumo(4)">쯔모</button>
-      <button class="button" onclick="ron(4)">론</button>
-      <button class="button" onclick="riichi(4)">리치</button>
-    </div>
-    
+
     <h2>공탁 점수: <span id="kyotaku">0</span> 점</h2>
     <button class="button" onclick="resetGame()">새 게임</button>
+
     <!-- 키패드 UI -->
     <div class="keypad">
       <input type="text" id="keypad-input" placeholder="입력 값" readonly>
