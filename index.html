@@ -110,10 +110,27 @@
       <button class="button" onclick="ron(4)">론</button>
       <button class="button" onclick="riichi(4)">리치</button>
     </div>
+    
+    <h2>공탁 점수: <span id="kyotaku">0</span> 점</h2>
+    <button class="button" onclick="resetGame()">새 게임</button>
+    <!-- 키패드 UI -->
+    <div class="keypad">
+      <input type="text" id="keypad-input" placeholder="입력 값" readonly>
+      <button onclick="keypadPress(1)">1</button>
+      <button onclick="keypadPress(2)">2</button>
+      <button onclick="keypadPress(3)">3</button>
+      <button onclick="keypadPress(4)">4</button>
+      <button onclick="keypadPress(5)">5</button>
+      <button onclick="keypadPress(6)">6</button>
+      <button onclick="keypadPress(7)">7</button>
+      <button onclick="keypadPress(8)">8</button>
+      <button onclick="keypadPress(9)">9</button>
+      <button onclick="keypadPress(0)">0</button>
+      <button onclick="clearKeypad()">C</button>
+      <button onclick="submitKeypad()">입력</button>
+    </div>
   </div>
 
-  <h2>공탁 점수: <span id="kyotaku">0</span> 점</h2>
-  <button class="button" onclick="resetGame()">새 게임</button>
   <script>
     let scores = [25000, 25000, 25000, 25000];
     let kyotaku = 0;
