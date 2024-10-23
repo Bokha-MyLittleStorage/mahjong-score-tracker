@@ -1,168 +1,198 @@
-
-코드 복사
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>4인 마작 점수판</title>
+  <title>Mahjong Score Tracker</title>
   <style>
     body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
       font-family: Arial, sans-serif;
-    }
-    .scoreboard {
-      border-collapse: collapse;
-      width: 80%;
-      text-align: center;
-    }
-    .scoreboard th, .scoreboard td {
-      border: 2px solid #333;
-      padding: 10px;
-      font-size: 1.1em;
-    }
-    .score-input {
-      width: 70px;
-      padding: 5px;
-      text-align: center;
-      font-size: 1em;
-    }
-    .button {
-      margin-top: 5px;
-      padding: 5px;
-      font-size: 0.8em;
-      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
     }
     h1 {
-      text-align: center;
       margin-bottom: 20px;
     }
-    .flex-container {
+    table {
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+    table, th, td {
+      border: 1px solid black;
+      padding: 10px;
+      text-align: center;
+    }
+    #message {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    .player-buttons {
+      margin-top: 10px;
       display: flex;
       justify-content: space-around;
+      width: 100%;
+    }
+    .input-area {
       margin-top: 10px;
     }
-    .keypad {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      width: 180px;
-      margin-top: 10px;
+    .input-field {
+      padding: 8px;
+      font-size: 16px;
     }
-    .keypad button {
-      width: 60px;
-      height: 60px;
-      margin: 5px;
-      font-size: 1.2em;
-      cursor: pointer;
+    .input-btn {
+      padding: 8px;
+      font-size: 16px;
+      margin-left: 10px;
     }
-    .keypad input {
-      width: 180px;
-      height: 50px;
-      text-align: center;
-      font-size: 1.5em;
-      margin-bottom: 10px;
+    .select-btn {
+      margin-top: 5px;
+      padding: 6px 12px;
     }
   </style>
 </head>
 <body>
+
+<h1 id="message">4인 마작 점수판</h1>
+<table id="scoreboard">
+  <tr>
+    <th>플레이어 1</th>
+    <th>플레이어 2</th>
+    <th>플레이어 3</th>
+    <th>플레이어 4</th>
+  </tr>
+  <tr>
+    <td><input type="text" id="score1" readonly></td>
+    <td><input type="text" id="score2" readonly></td>
+    <td><input type="text" id="score3" readonly></td>
+    <td><input type="text" id="score4" readonly></td>
+  </tr>
+  <tr>
+    <td id="diff1"></td>
+    <td id="diff2"></td>
+    <td id="diff3"></td>
+    <td id="diff4"></td>
+  </tr>
+</table>
+
+<!-- 플레이어별 버튼 -->
+<div class="player-buttons">
   <div>
-    <h1>4인 마작 점수판</h1>
-    <table class="scoreboard">
-      <thead>
-        <tr>
-          <th>플레이어 1</th>
-          <th>플레이어 2</th>
-          <th>플레이어 3</th>
-          <th>플레이어 4</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><input type="number" id="score1" class="score-input" value="25000"></td>
-          <td><input type="number" id="score2" class="score-input" value="25000"></td>
-          <td><input type="number" id="score3" class="score-input" value="25000"></td>
-          <td><input type="number" id="score4" class="score-input" value="25000"></td>
-        </tr>
-      </tbody>
-    </table>
-
-    <div class="flex-container">
-      <div>
-        <button class="button" onclick="tsumo(1)">쯔모</button>
-        <button class="button" onclick="ron(1)">론</button>
-        <button class="button" onclick="riichi(1)">리치</button>
-      </div>
-      <div>
-        <button class="button" onclick="tsumo(2)">쯔모</button>
-        <button class="button" onclick="ron(2)">론</button>
-        <button class="button" onclick="riichi(2)">리치</button>
-      </div>
-      <div>
-        <button class="button" onclick="tsumo(3)">쯔모</button>
-        <button class="button" onclick="ron(3)">론</button>
-        <button class="button" onclick="riichi(3)">리치</button>
-      </div>
-      <div>
-        <button class="button" onclick="tsumo(4)">쯔모</button>
-        <button class="button" onclick="ron(4)">론</button>
-        <button class="button" onclick="riichi(4)">리치</button>
-      </div>
-    </div>
-
-    <h2>공탁 점수: <span id="kyotaku">0</span> 점</h2>
-    <button class="button" onclick="resetGame()">새 게임</button>
-
-    <!-- 키패드 UI -->
-    <div class="keypad">
-      <input type="text" id="keypad-input" placeholder="입력 값" readonly>
-      <button onclick="keypadPress(1)">1</button>
-      <button onclick="keypadPress(2)">2</button>
-      <button onclick="keypadPress(3)">3</button>
-      <button onclick="keypadPress(4)">4</button>
-      <button onclick="keypadPress(5)">5</button>
-      <button onclick="keypadPress(6)">6</button>
-      <button onclick="keypadPress(7)">7</button>
-      <button onclick="keypadPress(8)">8</button>
-      <button onclick="keypadPress(9)">9</button>
-      <button onclick="keypadPress(0)">0</button>
-      <button onclick="clearKeypad()">C</button>
-      <button onclick="submitKeypad()">입력</button>
-    </div>
+    <button onclick="tsumo(1)">쯔모</button>
+    <button onclick="ron(1)">론</button>
+    <button onclick="riichi(1)">리치</button>
+    <button class="select-btn" id="select1" onclick="selectPlayer(1)">선택</button>
   </div>
+  <div>
+    <button onclick="tsumo(2)">쯔모</button>
+    <button onclick="ron(2)">론</button>
+    <button onclick="riichi(2)">리치</button>
+    <button class="select-btn" id="select2" onclick="selectPlayer(2)">선택</button>
+  </div>
+  <div>
+    <button onclick="tsumo(3)">쯔모</button>
+    <button onclick="ron(3)">론</button>
+    <button onclick="riichi(3)">리치</button>
+    <button class="select-btn" id="select3" onclick="selectPlayer(3)">선택</button>
+  </div>
+  <div>
+    <button onclick="tsumo(4)">쯔모</button>
+    <button onclick="ron(4)">론</button>
+    <button onclick="riichi(4)">리치</button>
+    <button class="select-btn" id="select4" onclick="selectPlayer(4)">선택</button>
+  </div>
+</div>
 
+<!-- 점수 입력란 -->
+<div class="input-area">
+  <input type="text" id="input-field" class="input-field">
+  <button class="input-btn" onclick="submitInput()">입력</button>
+</div>
 <script>
   let scores = [25000, 25000, 25000, 25000];
   let kyotaku = 0;
-  let currentInput = '';  // 키패드 입력값을 저장하는 변수
+  let inputMode = null;  // 현재 입력받고 있는 모드 ('oya', 'loser', 'payment' 등)
+  let selectedPlayer = null;
 
-  // 점수 초기화
-  function resetGame() {
-    scores = [25000, 25000, 25000, 25000];
-    kyotaku = 0;
-    updateUI();
-  }
-
-  // UI 업데이트
   function updateUI() {
     document.getElementById('score1').value = scores[0];
     document.getElementById('score2').value = scores[1];
     document.getElementById('score3').value = scores[2];
     document.getElementById('score4').value = scores[3];
-    document.getElementById('kyotaku').textContent = kyotaku;
-    saveScores();
+
+    document.getElementById('diff1').textContent = '';
+    document.getElementById('diff2').textContent = scores[1] - scores[0];
+    document.getElementById('diff3').textContent = scores[2] - scores[0];
+    document.getElementById('diff4').textContent = scores[3] - scores[0];
   }
 
-  // 점수 저장 (로컬 스토리지 사용)
+  function setMessage(msg) {
+    document.getElementById('message').textContent = msg;
+  }
+
+  function resetMessage() {
+    document.getElementById('message').textContent = '4인 마작 점수판';
+  }
+
+  function selectPlayer(player) {
+    if (inputMode === 'oya' || inputMode === 'loser') {
+      selectedPlayer = player;
+      setMessage('플레이어 ' + player + '가 선택되었습니다.');
+      inputMode = null;  // 선택 모드 종료
+    }
+  }
+
+  function submitInput() {
+    const inputValue = document.getElementById('input-field').value;
+    if (!inputValue || isNaN(inputValue)) {
+      alert('유효한 숫자를 입력하세요.');
+      return;
+    }
+    const points = parseInt(inputValue);
+    if (inputMode === 'payment') {
+      handlePayment(points);
+    }
+  }
+  function tsumo(player) {
+    setMessage('오야를 선택하세요.');
+    inputMode = 'oya';
+    // 쯔모 로직 추가
+  }
+
+  function ron(player) {
+    setMessage('방총자를 선택하세요.');
+    inputMode = 'loser';
+    // 론 로직 추가
+  }
+
+  function riichi(player) {
+    if (scores[player - 1] >= 1000) {
+      scores[player - 1] -= 1000;
+      kyotaku += 1000;
+      updateUI();
+      resetMessage();
+    } else {
+      alert('리치를 선언할 충분한 점수가 없습니다.');
+    }
+  }
+
+  function handlePayment(points) {
+    if (selectedPlayer !== null) {
+      scores[selectedPlayer - 1] -= points;
+      updateUI();
+      resetMessage();
+    }
+    selectedPlayer = null;
+    inputMode = null;
+  }
+</script>
+<script>
   function saveScores() {
     localStorage.setItem('scores', JSON.stringify(scores));
     localStorage.setItem('kyotaku', kyotaku);
   }
 
-  // 점수 불러오기
   function loadScores() {
     const savedScores = localStorage.getItem('scores');
     const savedKyotaku = localStorage.getItem('kyotaku');
@@ -173,141 +203,10 @@
     }
   }
 
-  // 키패드 UI
-  function showKeypad(callback) {
-    currentInput = '';
-    const keypad = document.getElementById('keypad');
-    const inputDisplay = document.getElementById('keypad-input');
-    inputDisplay.value = currentInput;
-    keypad.style.display = 'block';
-
-    // 키패드에서 숫자 버튼을 클릭할 때
-    const buttons = document.querySelectorAll('.keypad button');
-    buttons.forEach(button => {
-      button.onclick = () => {
-        const value = button.getAttribute('data-value');
-        if (value === 'clear') {
-          currentInput = '';
-        } else if (value === 'enter') {
-          callback(currentInput);
-          keypad.style.display = 'none';  // 키패드 숨기기
-        } else {
-          currentInput += value;
-        }
-        inputDisplay.value = currentInput;
-      };
-    });
-  }
-
-  // 쯔모 함수
-  function tsumo(player) {
-    showKeypad((oyaInput) => {
-      let oya = parseInt(oyaInput, 10);
-      if (isNaN(oya) || oya < 1 || oya > 4) {
-        alert('유효하지 않은 오야 번호입니다.');
-        return;
-      }
-      if (oya === player) {
-        showKeypad((pointInput) => {
-          let point = parseInt(pointInput, 10);
-          if (!isNaN(point)) {
-            for (let i = 0; i < 4; i++) {
-              if (i + 1 !== player) scores[i] -= point;
-            }
-            scores[player - 1] += point * 3;
-            distributeKyotaku(player);
-            updateUI();
-          }
-        });
-      } else {
-        showKeypad((oyaPointInput) => {
-          let oyaPoint = parseInt(oyaPointInput, 10);
-          showKeypad((otherPointInput) => {
-            let otherPoint = parseInt(otherPointInput, 10);
-            if (!isNaN(oyaPoint) && !isNaN(otherPoint)) {
-              scores[oya - 1] -= oyaPoint;
-              for (let i = 0; i < 4; i++) {
-                if (i + 1 !== player && i + 1 !== oya) scores[i] -= otherPoint;
-              }
-              scores[player - 1] += oyaPoint + otherPoint * 2;
-              distributeKyotaku(player);
-              updateUI();
-            }
-          });
-        });
-      }
-    });
-  }
-
-  // 론 함수
-  function ron(player) {
-    showKeypad((loserInput) => {
-      let loser = parseInt(loserInput, 10);
-      if (isNaN(loser) || loser < 1 || loser > 4 || loser === player) {
-        alert('유효하지 않은 방총자 번호입니다.');
-        return;
-      }
-      showKeypad((pointInput) => {
-        let point = parseInt(pointInput, 10);
-        if (!isNaN(point)) {
-          scores[loser - 1] -= point;
-          scores[player - 1] += point;
-          distributeKyotaku(player);
-          updateUI();
-        }
-      });
-    });
-  }
-
-  // 리치 함수
-  function riichi(player) {
-    if (scores[player - 1] >= 1000) {
-      scores[player - 1] -= 1000;
-      kyotaku += 1000;
-      updateUI();
-    } else {
-      alert('리치를 선언할 충분한 점수가 없습니다.');
-    }
-  }
-  // 공탁 점수 분배 함수
-  function distributeKyotaku(player) {
-    if (kyotaku > 0) {
-      scores[player - 1] += kyotaku;
-      kyotaku = 0;
-    }
-  }
-
-  // 페이지 로드 시 자동 불러오기
   window.onload = function() {
     loadScores();
+    updateUI();
   };
-
-  // 키패드 닫기
-  function closeKeypad() {
-    const keypad = document.getElementById('keypad');
-    keypad.style.display = 'none';
-  }
 </script>
-
-<!-- 키패드 UI -->
-<div id="keypad" style="display:none;">
-  <input type="text" id="keypad-input" readonly>
-  <div>
-    <button data-value="1">1</button>
-    <button data-value="2">2</button>
-    <button data-value="3">3</button>
-    <button data-value="4">4</button>
-  </div>
-  <div>
-    <button data-value="5">5</button>
-    <button data-value="6">6</button>
-    <button data-value="7">7</button>
-    <button data-value="8">8</button>
-  </div>
-  <div>
-    <button data-value="9">9</button>
-    <button data-value="0">0</button>
-    <button data-value="clear">Clear</button>
-    <button data-value="enter">Enter</button>
-  </div>
-</div>
+</body>
+</html>
